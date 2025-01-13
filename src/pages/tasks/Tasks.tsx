@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2, ChevronRight, ListFilter } from 'lucide-react';
 import { useTasks } from '@/contexts/TaskContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -37,6 +38,7 @@ export default function Tasks() {
     toggleTask,
     deleteTask
   } = useTasks();
+  const { addNotification } = useNotifications();
 
   const [showNewListDialog, setShowNewListDialog] = useState(false);
   const [showEditListDialog, setShowEditListDialog] = useState(false);
@@ -50,6 +52,13 @@ export default function Tasks() {
       addTaskList(listName);
       setListName('');
       setShowNewListDialog(false);
+      
+      addNotification(
+        'task',
+        'created',
+        'Nova lista criada',
+        `A lista "${listName}" foi criada com sucesso.`
+      );
     }
   };
 
@@ -58,6 +67,13 @@ export default function Tasks() {
       editTaskList(selectedList.id, listName);
       setListName('');
       setShowEditListDialog(false);
+      
+      addNotification(
+        'task',
+        'created',
+        'Lista atualizada',
+        `A lista "${listName}" foi atualizada com sucesso.`
+      );
     }
   };
 
@@ -65,6 +81,13 @@ export default function Tasks() {
     if (selectedList) {
       deleteTaskList(selectedList.id);
       setShowDeleteListDialog(false);
+      
+      addNotification(
+        'task',
+        'created',
+        'Lista excluída',
+        `A lista "${selectedList.name}" foi excluída com sucesso.`
+      );
     }
   };
 
@@ -73,11 +96,30 @@ export default function Tasks() {
     if (newTask.trim() && selectedList) {
       addTask(selectedList.id, newTask);
       setNewTask('');
+      
+      addNotification(
+        'task',
+        'created',
+        'Nova tarefa criada',
+        `A tarefa "${newTask}" foi adicionada à lista "${selectedList.name}".`
+      );
     }
   };
 
   const handleToggleTask = (listId: string, taskId: string) => {
-    toggleTask(listId, taskId);
+    const list = taskLists.find(l => l.id === listId);
+    const task = list?.tasks.find(t => t.id === taskId);
+    
+    if (task) {
+      toggleTask(listId, taskId);
+      
+      addNotification(
+        'task',
+        'completed',
+        task.completed ? 'Tarefa reaberta' : 'Tarefa concluída',
+        `A tarefa "${task.content}" foi ${task.completed ? 'reaberta' : 'marcada como concluída'}.`
+      );
+    }
   };
 
   // Get all tasks from all lists if no list is selected, or tasks from selected list

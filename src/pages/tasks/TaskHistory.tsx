@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2, ChevronRight, ListFilter, Save, FileText } from 'lucide-react';
 import { useTasks } from '@/contexts/TaskContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -38,6 +39,7 @@ interface Note {
 
 export default function Notes() {
   const { taskLists, selectedList, selectList, addTaskList } = useTasks();
+  const { addNotification } = useNotifications();
   const [notes, setNotes] = useState<Note[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
   const [showNewNoteDialog, setShowNewNoteDialog] = useState(false);
@@ -54,6 +56,13 @@ export default function Notes() {
       addTaskList(newListName);
       setNewListName('');
       setShowNewListDialog(false);
+      
+      addNotification(
+        'task',
+        'created',
+        'Nova lista criada',
+        `A lista "${newListName}" foi criada com sucesso.`
+      );
     }
   };
 
@@ -72,6 +81,13 @@ export default function Notes() {
       setNoteTitle('');
       setNoteContent('');
       setShowNewNoteDialog(false);
+      
+      addNotification(
+        'note',
+        status === 'draft' ? 'created' : 'saved',
+        status === 'draft' ? 'Rascunho criado' : 'Nota salva',
+        `A nota "${noteTitle || 'Sem título'}" foi ${status === 'draft' ? 'salva como rascunho' : 'salva'}.`
+      );
     }
   };
 
@@ -90,6 +106,13 @@ export default function Notes() {
       ));
       setShowEditNoteDialog(false);
       setSelectedNote(null);
+      
+      addNotification(
+        'note',
+        'saved',
+        'Nota atualizada',
+        `A nota "${noteTitle || 'Sem título'}" foi atualizada com sucesso.`
+      );
     }
   };
 
@@ -98,6 +121,13 @@ export default function Notes() {
       setNotes(prev => prev.filter(note => note.id !== selectedNote.id));
       setShowDeleteNoteDialog(false);
       setSelectedNote(null);
+      
+      addNotification(
+        'note',
+        'created',
+        'Nota excluída',
+        `A nota "${selectedNote.title}" foi excluída com sucesso.`
+      );
     }
   };
 

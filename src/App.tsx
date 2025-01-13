@@ -5,8 +5,9 @@ import { CustomerProvider } from './contexts/CustomerContext';
 import { EmailTemplateProvider } from './contexts/EmailTemplateContext';
 import { EmailProvider } from './contexts/EmailContext';
 import { TaskProvider } from './contexts/TaskContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import Sidebar from './components/Sidebar';
 import TopBanner from './components/TopBanner';
 import DashboardNav from './components/DashboardNav';
@@ -86,25 +87,27 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <UserProvider>
-            <CustomerProvider>
-              <EmailProvider>
-                <EmailTemplateProvider>
-                  <TaskProvider>
-                    <Routes>
-                      <Route path="/auth" element={<Auth />} />
-                      <Route
-                        path="/*"
-                        element={
-                          <RequireAuth>
-                            <AppContent />
-                          </RequireAuth>
-                        }
-                      />
-                    </Routes>
-                  </TaskProvider>
-                </EmailTemplateProvider>
-              </EmailProvider>
-            </CustomerProvider>
+            <NotificationProvider>
+              <CustomerProvider>
+                <EmailProvider>
+                  <EmailTemplateProvider>
+                    <TaskProvider>
+                      <Routes>
+                        <Route path="/auth" element={<Auth />} />
+                        <Route
+                          path="/*"
+                          element={
+                            <RequireAuth>
+                              <AppContent />
+                            </RequireAuth>
+                          }
+                        />
+                      </Routes>
+                    </TaskProvider>
+                  </EmailTemplateProvider>
+                </EmailProvider>
+              </CustomerProvider>
+            </NotificationProvider>
           </UserProvider>
         </AuthProvider>
       </ThemeProvider>
