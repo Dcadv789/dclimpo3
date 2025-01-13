@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, FileBox, Calendar, Filter, Plus } from 'lucide-react';
+import { FileText, FileBox, Calendar, Filter, Plus, ChevronRight } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -11,15 +12,41 @@ import {
 } from "@/components/ui/select";
 
 type TimeFilter = 'today' | 'week' | 'month' | 'all';
+type NoteStatus = 'draft' | 'saved';
+
+interface Note {
+  id: string;
+  title: string;
+  content: string;
+  status: NoteStatus;
+  listId: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function NotesDashboard() {
+  const navigate = useNavigate();
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('all');
+  
+  // Get notes from localStorage
+  const [notes, setNotes] = useState<Note[]>(() => {
+    const savedNotes = localStorage.getItem('notes');
+    return savedNotes ? JSON.parse(savedNotes) : [];
+  });
 
-  // Mock statistics for notes
-  const totalNotes = 24;
-  const draftNotes = 8;
-  const savedNotes = 16;
-  const saveRate = Math.round((savedNotes / totalNotes) * 100);
+  // Calculate statistics
+  const totalNotes = notes.length;
+  const draftNotes = notes.filter(note => note.status === 'draft').length;
+  const savedNotes = notes.filter(note => note.status === 'saved').length;
+  const saveRate = totalNotes > 0 ? Math.round((savedNotes / totalNotes) * 100) : 0;
+
+  // Get recent notes
+  const getRecentNotes = () => {
+    const sortedNotes = [...notes].sort(
+      (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+    return sortedNotes.slice(0, 3);
+  };
 
   return (
     <div className="space-y-6">
@@ -78,7 +105,9 @@ export default function NotesDashboard() {
             <Filter className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4</div>
+            <div className="text-2xl font-bold">
+              {totalNotes > 0 ? Math.round(totalNotes / 3) : 0}
+            </div>
             <p className="text-xs text-muted-foreground">
               Notas por lista
             </p>
@@ -104,7 +133,7 @@ export default function NotesDashboard() {
                   <SelectItem value="all">Todo o Período</SelectItem>
                 </SelectContent>
               </Select>
-              <Button>
+              <Button onClick={() => navigate('/tasks/history')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Nota
               </Button>
@@ -113,23 +142,49 @@ export default function NotesDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {/* Mock recent notes */}
-            {[1, 2, 3].map((_, index) => (
+            {getRecentNotes().map((note) => (
               <div
-                key={index}
-                className="p-4 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
+                key={note.id}
+                className="p-4 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors cursor-pointer"
+                onClick={() => navigate('/tasks/history')}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-medium">Nota de Reunião {index + 1}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-medium">{note.title}</h3>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      note.status === 'saved' 
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                        : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400'
+                    }`}>
+                      {note.status === 'saved' ? 'Salva' : 'Rascunho'}
+                    </span>
+                  </div>
                   <span className="text-sm text-muted-foreground">
-                    {new Date().toLocaleDateString()}
+                    {new Date(note.updatedAt).toLocaleDateString()}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {note.content}
                 </p>
+                <div className="flex items-center justify-end mt-2">
+                  <Button variant="ghost" size="sm" className="gap-1">
+                    Ver mais <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             ))}
+
+            {notes.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-medium mb-2">Nenhuma nota criada</p>
+                <p className="text-sm mb-4">Comece criando sua primeira nota</p>
+                <Button onClick={() => navigate('/tasks/history')}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Criar Nova Nota
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

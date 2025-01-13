@@ -24,6 +24,7 @@ const pageNames: Record<string, string> = {
   '/relatorios/contas-semanais': 'Contas Semanais',
   '/relatorios/contas-mensais': 'Contas Mensais',
   '/relatorios/fechamento': 'Fechamento',
+  '/numero-extenso': 'Número por Extenso',
 };
 
 export default function TopBanner() {
