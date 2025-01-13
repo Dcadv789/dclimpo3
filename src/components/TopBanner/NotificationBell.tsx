@@ -58,7 +58,7 @@ export default function NotificationBell() {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent align="end" className="w-96">
         <div className="flex items-center justify-between px-4 py-2 border-b">
           <h4 className="font-medium">Notificações</h4>
           <div className="flex items-center gap-1">
@@ -66,7 +66,7 @@ export default function NotificationBell() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 text-blue-600"
+                className="h-8 text-blue-600 whitespace-nowrap"
                 onClick={markAllAsRead}
               >
                 <CheckCheck className="h-4 w-4 mr-1" />

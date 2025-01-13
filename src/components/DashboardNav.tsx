@@ -60,7 +60,7 @@ const navConfig: NavConfig = {
   ],
   '/tasks/dashboard': [
     {
-      title: 'Tasks',
+      title: 'Tarefas',
       href: '/tasks/dashboard',
       icon: <ListTodo className="w-4 h-4" />
     },
@@ -72,7 +72,7 @@ const navConfig: NavConfig = {
   ],
   '/tasks/notes-dashboard': [
     {
-      title: 'Tasks',
+      title: 'Tarefas',
       href: '/tasks/dashboard',
       icon: <ListTodo className="w-4 h-4" />
     },
@@ -84,7 +84,7 @@ const navConfig: NavConfig = {
   ],
   '/tasks': [
     {
-      title: 'Tasks',
+      title: 'Tarefas',
       href: '/tasks',
       icon: <ListTodo className="w-4 h-4" />
     }
