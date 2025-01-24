@@ -27,6 +27,11 @@ import TaskHistory from './pages/tasks/TaskHistory';
 import TasksDashboard from './pages/tasks/Dashboard';
 import NotesDashboard from './pages/tasks/NotesDashboard';
 
+// Import new diagnostic pages
+import Diagnostico from './pages/diagnostico/Diagnostico';
+import BackOffice from './pages/diagnostico/BackOffice';
+import Resultados from './pages/diagnostico/Resultados';
+
 function RequireAuth({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
@@ -73,6 +78,11 @@ function AppContent() {
               <Route path="/tasks/notes-dashboard" element={<NotesDashboard />} />
               <Route path="/tasks" element={<Tasks />} />
               <Route path="/tasks/history" element={<TaskHistory />} />
+
+              {/* Diagnostic Routes */}
+              <Route path="/diagnostico/diagnostico" element={<Diagnostico />} />
+              <Route path="/diagnostico/backoffice" element={<BackOffice />} />
+              <Route path="/diagnostico/resultados" element={<Resultados />} />
             </Routes>
           </div>
         </main>

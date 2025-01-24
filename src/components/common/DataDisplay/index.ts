@@ -1,4 +1,1 @@
-export * from './Card';
-export * from './DataTable';
-export * from './EmptyState';
-export * from './LoadingState';
+// Remover arquivo - Não é mais necessário após remoção dos componentes

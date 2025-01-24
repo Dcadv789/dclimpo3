@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 
-export default function Calculator() {
+export function Calculator() {
   const [display, setDisplay] = useState('0');
   const [operation, setOperation] = useState('');
   const [firstNumber, setFirstNumber] = useState('');

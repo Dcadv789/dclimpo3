@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Minus, LayoutDashboard, Settings, Home, ChevronLeft, ChevronRight, Factory, TextQuote, ListTodo, LogOut } from 'lucide-react';
+import { Plus, Minus, LayoutDashboard, Settings, Home, ChevronLeft, ChevronRight, Factory, TextQuote, ListTodo, LogOut, FileText, Calculator, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
@@ -76,6 +76,15 @@ export default function Sidebar() {
         { title: 'Dashboard', path: '/tasks/dashboard' },
         { title: 'Task', path: '/tasks' },
         { title: 'Bloco de Notas', path: '/tasks/history' },
+      ],
+    },
+    {
+      title: 'Diagnóstico Finan',
+      icon: <Calculator className="w-5 h-5" />,
+      submenu: [
+        { title: 'Diagnóstico', path: '/diagnostico/diagnostico' },
+        { title: 'BackOffice', path: '/diagnostico/backoffice' },
+        { title: 'Resultados', path: '/diagnostico/resultados' },
       ],
     },
     {
@@ -182,7 +191,7 @@ export default function Sidebar() {
                               'block w-full text-left p-2 pl-8 rounded-lg mb-0.5 transition-colors duration-100 text-[13px]',
                               location.pathname === sub.path
                                 ? 'bg-blue-600 text-white'
-                                : 'hover:bg-gray-100 dark:hover:bg-[#242424] hover:text-blue-600 text-gray-600 dark:text-gray-400'
+                                : 'hover:bg-gray-100 dark:hover:bg-[ #242424] hover:text-blue-600 text-gray-600 dark:text-gray-400'
                             )}
                           >
                             {sub.title}
